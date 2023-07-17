@@ -1,0 +1,12 @@
+version: '3'
+services:
+  postgresql:
+    image: timescale/timescaledb-ha:pg15-latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: time
+      POSTGRES_DB: paper
+      POSTGRES_USER: paper
+      TZ: UTC
