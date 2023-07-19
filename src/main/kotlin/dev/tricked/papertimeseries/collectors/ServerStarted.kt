@@ -35,7 +35,7 @@ class ServerStartedCollector : BaseCollector<Startup>() {
         transaction {
             val res = table.select { table.time eq StartupTime.startup }.singleOrNull()
             // plugin was reloaded
-            if(res != null) return@transaction
+            if (res != null) return@transaction
 
             val javaVersion = System.getProperty("java.version")
             val cpuCount = ManagementFactory.getOperatingSystemMXBean().availableProcessors
@@ -49,7 +49,7 @@ class ServerStartedCollector : BaseCollector<Startup>() {
             val systemArch = System.getProperty("os.arch")
 
             table.insert {
-                it[time] =  StartupTime.startup
+                it[time] = StartupTime.startup
                 it[this.javaVersion] = javaVersion
                 it[this.cpuCount] = cpuCount
                 it[this.totalRam] = totalRam
@@ -68,12 +68,15 @@ class ServerStartedCollector : BaseCollector<Startup>() {
             osName.contains("nix") || osName.contains("nux") || osName.contains("mac") -> {
                 executeCommand("uname -r")
             }
+
             osName.contains("win") -> {
                 System.getProperty("os.version")
             }
+
             osName.contains("sunos") -> {
                 executeCommand("uname -v")
             }
+
             else -> {
                 "Unknown"
             }

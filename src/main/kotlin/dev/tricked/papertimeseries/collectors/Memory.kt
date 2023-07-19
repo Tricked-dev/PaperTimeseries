@@ -3,11 +3,9 @@ package dev.tricked.papertimeseries.collectors
 import dev.tricked.papertimeseries.common.TimedCollector
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.javatime.CurrentDateTime
-import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.javatime.CurrentTimestamp
 import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object Memory : Table() {
     val time = timestamp("time").defaultExpression(CurrentTimestamp())
@@ -18,7 +16,7 @@ object Memory : Table() {
     override val primaryKey = PrimaryKey(time)
 }
 
-class MemoryCollector:TimedCollector<Memory>() {
+class MemoryCollector : TimedCollector<Memory>() {
     override val table = Memory
     override fun run() {
         transaction {

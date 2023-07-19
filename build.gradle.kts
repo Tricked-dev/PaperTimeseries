@@ -67,7 +67,7 @@ tasks {
         val props = mapOf("version" to version)
         inputs.properties(props)
         filteringCharset = "UTF-8"
-        filesMatching("paper-plugin.yml") {
+        filesMatching("plugin.yml") {
             expand(props)
         }
     }
@@ -142,4 +142,5 @@ sourceSets {
 
 tasks.runServer {
     minecraftVersion("1.20.1")
+    jvmArgs("-Xmx4G")
 }

@@ -12,8 +12,7 @@ import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-
-object Commands: Table() {
+object Commands : Table() {
     val time = timestamp("time").defaultExpression(CurrentTimestamp())
     val value = text("value")
     val args = text("args")

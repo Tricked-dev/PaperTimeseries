@@ -1,0 +1,17 @@
+name: PaperTimeSeries
+version: '${version}'
+main: dev.tricked.papertimeseries.PaperTimeSeries
+api-version: '1.20'
+load: STARTUP
+description: Exports paper stats to Postgresql
+permissions:
+  papertimeseries.write:
+      description: Ability to turn on and off the paper timeseries plugin
+      default: op
+commands:
+  pts:
+    description: "Enabled or disabled the paper timeseries plugin"
+    usage: "/pts <arg>"
+    aliases: []
+    permission: papertimeseries.write
+    permission-message: "You do not have permission to use this command"

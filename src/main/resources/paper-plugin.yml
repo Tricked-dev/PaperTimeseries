@@ -1,6 +1,0 @@
-name: PaperTimeSeries
-version: '${version}'
-main: dev.tricked.papertimeseries.PaperTimeSeries
-api-version: '1.20'
-load: STARTUP
-description: Exports paper stats to Postgresql

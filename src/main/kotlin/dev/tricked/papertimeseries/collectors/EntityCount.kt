@@ -5,6 +5,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import org.bukkit.World
+import org.bukkit.entity.Player
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.CurrentTimestamp
@@ -24,7 +25,7 @@ object EntityCounts : Table() {
 class EntityCountCollector : WorldCollector<EntityCounts>() {
     override val table = EntityCounts
     override fun collect(world: World) {
-        val mapEntityTypesToCounts = world.entities.groupingBy { it.name }.eachCount()
+        val mapEntityTypesToCounts = world.entities.filter { it !is Player }.groupingBy { it.name }.eachCount()
         transaction {
             table.insert {
                 it[value] = mapEntityTypesToCounts

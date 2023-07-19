@@ -1,29 +1,20 @@
-package dev.tricked.papertimeseries
+package dev.tricked.papertimeseries.tps
 
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
-import java.util.function.Supplier
 
 
-class TpsMonitor @JvmOverloads constructor(
-    systemTimeSupplier: Supplier<Long> =
-        Supplier<Long> {
-            System.currentTimeMillis()
-        }
-) :
-    Runnable {
-    private val systemTimeSupplier: Supplier<Long>
+class TpsMonitor : Runnable {
     private val tpsQueue = LinkedList<Float>()
     private var lastPoll: Long
 
     init {
-        this.systemTimeSupplier = systemTimeSupplier
-        lastPoll = systemTimeSupplier.get()
+        lastPoll = System.currentTimeMillis()
     }
 
     override fun run() {
-        val now: Long = systemTimeSupplier.get()
+        val now: Long = System.currentTimeMillis()
         val timeSpent = now - lastPoll
         if (timeSpent <= 0) {
             // This would be caused by an invalid poll interval, skip it

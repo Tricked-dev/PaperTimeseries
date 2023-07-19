@@ -19,6 +19,15 @@ object LoadedChunks : Table() {
 class LoadedChunksCollector : WorldCollector<LoadedChunks>() {
     override val table = LoadedChunks
     override fun collect(world: World) {
+//        var holders = io.papermc.paper.chunk.system.ChunkSystem.getVisibleChunkHolders(world)
+
+//       var count= world.chunkCount
+////        var status = world.loadedChunks[0].getFullStatus()
+//        var entitiesLoaded = world.loadedChunks.count { it.isEntitiesLoaded }
+//        var forceLoaded = world.loadedChunks.count { it.isForceLoaded }
+//        println("c: $count e: $entitiesLoaded f: $forceLoaded a: ${world.loadedChunks.size}")
+//        var entitiesLoaded = world.loadedChunks.count { it. }
+//        var a = (Bukkit.getServer() as org.bukkit.craftbukkit.CraftServer)
         transaction {
             table.insert {
                 it[value] = world.loadedChunks.size

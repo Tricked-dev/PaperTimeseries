@@ -18,10 +18,16 @@ object MobCap : Table() {
 class MobCapCollector : WorldCollector<MobCap>() {
     override val table = MobCap
     override fun collect(world: World) {
+//        world.
+//        Bukkit.getServer().mobGoals
+//        CraftWorld
+//        val level: ServerLevel = world.hand()
+
         val server = Bukkit.getServer();
-        for(cap in SpawnCategory.entries) {
-            if(cap == SpawnCategory.MISC) continue;
-            val limit = server.getSpawnLimit(cap)
+        for (cap in SpawnCategory.entries) {
+            if (cap == SpawnCategory.MISC) continue;
+//            val limit = server.spawn(cap)
+
 //            val count =server.getEn
 //            println("${world.name}:${cap} = ${limit}")
         }
