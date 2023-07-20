@@ -23,9 +23,9 @@ class MobCapCollector : WorldCollector<MobCap>() {
 //        CraftWorld
 //        val level: ServerLevel = world.hand()
 
-        val server = Bukkit.getServer();
+        val server = Bukkit.getServer()
         for (cap in SpawnCategory.entries) {
-            if (cap == SpawnCategory.MISC) continue;
+            if (cap == SpawnCategory.MISC) continue
 //            val limit = server.spawn(cap)
 
 //            val count =server.getEn

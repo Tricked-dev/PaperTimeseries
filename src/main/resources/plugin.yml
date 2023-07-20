@@ -6,12 +6,12 @@ load: STARTUP
 description: Exports paper stats to Postgresql
 permissions:
   papertimeseries.write:
-      description: Ability to turn on and off the paper timeseries plugin
-      default: op
+    description: Ability to turn on and off the paper timeseries plugin
+    default: op
 commands:
   pts:
     description: "Enabled or disabled the paper timeseries plugin"
     usage: "/pts <arg>"
-    aliases: []
+    aliases: [ ]
     permission: papertimeseries.write
     permission-message: "You do not have permission to use this command"

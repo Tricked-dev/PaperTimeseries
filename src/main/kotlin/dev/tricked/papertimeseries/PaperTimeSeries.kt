@@ -28,13 +28,17 @@ class PaperTimeSeries : JavaPlugin(), Listener {
             LoadedChunksCollector(),
             MemoryCollector(),
             ThreadsCollector(),
-            MobCapCollector(),
+//            MobCapCollector(),
             ServerStartedCollector(),
             CommandsCollector()
         )
     }
 
     private var database: Database? = null
+
+    fun hasDatabase(): Boolean {
+        return database != null
+    }
 
     override fun onEnable() {
 
@@ -93,17 +97,20 @@ class PaperTimeSeries : JavaPlugin(), Listener {
 
 
         for (collector in collectors) {
-            val name = collector.javaClass.simpleName
-            var enabled = config.get("collectors.${name}.enabled")
-            if (enabled == null) {
-                config.set("collectors.${name}.enabled", true)
-                enabled = true
-            }
+            val name = collector.javaClass.simpleName.replace("Collector", "")
+            val enabled = getDefaultBool("collectors.${name}.enabled", true)
+
             var delay = config.getInt("collectors.${name}.time")
+
+            if (delay == 0 && name == "EntityCount") {
+                config.set("collectors.${name}.time", 250 * 16)
+            }
+
             if (delay == 0) {
                 delay = defaultDelay
             }
-            if (enabled == true) {
+
+            if (enabled) {
                 collector.enable(this, delay)
             }
         }
@@ -116,7 +123,9 @@ class PaperTimeSeries : JavaPlugin(), Listener {
         for (collector in collectors) {
             collector.disable(this)
         }
+
         if (database != null) TransactionManager.closeAndUnregister(database!!)
+
     }
 
     private fun getDefault(path: String, default: String): String {

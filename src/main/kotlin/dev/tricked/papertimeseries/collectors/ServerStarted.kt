@@ -8,12 +8,15 @@ import org.jetbrains.exposed.sql.javatime.CurrentTimestamp
 import org.jetbrains.exposed.sql.javatime.timestamp
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 import java.lang.management.ManagementFactory
 import java.time.Clock
+import java.time.Instant
 import java.time.ZoneId
 
 object Startup : Table() {
     val time = timestamp("time").defaultExpression(CurrentTimestamp())
+    val endTime = timestamp("end_time").nullable()
     val javaVersion = varchar("java_version", 50)
     val cpuCount = integer("cpu_count")
     val totalRam = long("total_ram")
@@ -24,7 +27,7 @@ object Startup : Table() {
 }
 
 object StartupTime {
-    val startup = Clock.system(ZoneId.of("UTC")).instant()
+    val startup: Instant = Clock.system(ZoneId.of("UTC")).instant()
 }
 
 class ServerStartedCollector : BaseCollector<Startup>() {
@@ -32,6 +35,11 @@ class ServerStartedCollector : BaseCollector<Startup>() {
 
     override fun enable(plugin: PaperTimeSeries, collectionTime: Int) {
         super.enable(plugin, collectionTime)
+        transaction {
+            table.update(where = { table.endTime.isNull() }) {
+                it[endTime] = table.time
+            }
+        }
         transaction {
             val res = table.select { table.time eq StartupTime.startup }.singleOrNull()
             // plugin was reloaded
@@ -61,6 +69,15 @@ class ServerStartedCollector : BaseCollector<Startup>() {
         }
     }
 
+    override fun disable(plugin: PaperTimeSeries) {
+        if (plugin.hasDatabase()) transaction {
+            Startup.update(where = { Startup.time eq StartupTime.startup }) {
+                it[endTime] = CurrentTimestamp()
+            }
+        }
+        super.disable(plugin)
+    }
+
     private fun getKernelVersion(): String {
         val osName = System.getProperty("os.name").lowercase()
 
@@ -88,5 +105,4 @@ class ServerStartedCollector : BaseCollector<Startup>() {
         process.waitFor()
         return process.inputStream.bufferedReader().use { it.readText().trim() }
     }
-
 }
