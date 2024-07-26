@@ -59,11 +59,7 @@ class PaperTimeSeries : JavaPlugin(), Listener {
 
         TickDurationCollector.init(this)
 
-        transaction {
-            Players.update {
-                it[online] = false
-            }
-        }
+
 
         val createTables = getDefaultBool("create.tables", true)
         val createHyperTables = getDefaultBool("create.hypertables", true)
@@ -88,6 +84,16 @@ class PaperTimeSeries : JavaPlugin(), Listener {
                         }
                     }
                 }
+        }
+
+        try {
+            transaction {
+                Players.update {
+                    it[online] = false
+                }
+            }
+        } catch(e: Exception) {
+            // table does not yet exist - this is fine
         }
 
         val defaultDelay = config.getInt("time", 250)

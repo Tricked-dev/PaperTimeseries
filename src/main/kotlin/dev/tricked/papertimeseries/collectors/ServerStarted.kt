@@ -71,8 +71,12 @@ class ServerStartedCollector : BaseCollector<Startup>() {
 
     override fun disable(plugin: PaperTimeSeries) {
         if (plugin.hasDatabase()) transaction {
-            Startup.update(where = { Startup.time eq StartupTime.startup }) {
-                it[endTime] = CurrentTimestamp()
+            try {
+                Startup.update(where = { Startup.time eq StartupTime.startup }) {
+                    it[endTime] = CurrentTimestamp()
+                }
+            } catch(e: Exception) {
+                //it's fine!
             }
         }
         super.disable(plugin)
